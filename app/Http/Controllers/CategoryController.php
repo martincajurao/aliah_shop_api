@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use \App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +13,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        return Category::all();
     }
 
     /**
@@ -34,33 +34,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $table = new Product;
+        $table = new Category;
         $table->name = $request->name;
-        $table->desc = $request->desc;
-        $table->price = $request->price;
-        $table->stocks = $request->stocks;
-        $table->product_category = $request->product_category;
-        
-        // $uploadFolder = 'images';
-        // $image_uploaded_path = $image->store($uploadFolder, 'public');
-        
-        // $image = $request->file('image');
-        $imageName = time().'.'. $request->file('image')->extension();  
-        $request->file('image')->move(public_path('images'), $imageName);
-        
-        $table->img =   $imageName;
+        $table->status = $request->status;
         $table->save();
         return $table;
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
         //
     }
@@ -68,10 +55,10 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
         //
     }
@@ -80,16 +67,14 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,  $id)
     {
-        $table = Product::findOrFail($id);
+        $table = Category::findOrFail($id);
         $table->name = $request->name;
-        $table->desc = $request->desc;
-        $table->price = $request->price;
-        $table->stocks = $request->stocks;
+        $table->status = $request->status;
         $table->save();
 
         return $table;
@@ -98,12 +83,12 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( $id)
     {
-        $table = Product::findOrFail($id);
+        $table = Category::findOrFail($id);
         $table->delete();
     }
 }

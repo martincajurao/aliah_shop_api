@@ -13,7 +13,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        $products = Product::with('category')->get();
+        return $products;
     }
 
     /**
@@ -62,7 +63,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        return Product::with('category')->findOrFail($id);
     }
 
     /**
@@ -90,6 +91,8 @@ class ProductController extends Controller
         $table->desc = $request->desc;
         $table->price = $request->price;
         $table->stocks = $request->stocks;
+        $table->img = $request->img;
+        $table->product_category = $request->product_category;
         $table->save();
 
         return $table;

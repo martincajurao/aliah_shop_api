@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use \App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File; 
 
 class ProductController extends Controller
 {
@@ -42,10 +43,6 @@ class ProductController extends Controller
         $table->stocks = $request->stocks;
         $table->product_category = $request->product_category;
         
-        // $uploadFolder = 'images';
-        // $image_uploaded_path = $image->store($uploadFolder, 'public');
-        
-        // $image = $request->file('image');
         $imageName = time().'.'. $request->file('image')->extension();  
         $request->file('image')->move(public_path('images'), $imageName);
         
@@ -91,10 +88,18 @@ class ProductController extends Controller
         $table->desc = $request->desc;
         $table->price = $request->price;
         $table->stocks = $request->stocks;
-        $table->img = $request->img;
         $table->product_category = $request->product_category;
-        $table->save();
+   
+        if($request->img){
+            File::delete($table->img);
+        }
 
+        $imageName = time().'.'. $request->file('image')->extension();  
+        $request->file('image')->move(public_path('images'), $imageName);
+        $table->img =   $imageName;
+
+        $table->img =   $imageName;
+        $table->save();
         return $table;
     }
 

@@ -42,12 +42,15 @@ class ProductController extends Controller
         $table->price = $request->price;
         $table->stocks = $request->stocks;
         $table->product_category = $request->product_category;
-        
-        $imageName = time().'.'. $request->file('image')->extension();  
-        $request->file('image')->move(public_path('images'), $imageName);
-        
-        $table->img =   $imageName;
+
+        if($request->file('image')){
+            $imageName = time().'.'. $request->file('image')->extension();  
+            $request->file('image')->move(public_path('images'), $imageName);
+            $table->img =   $imageName;
+        }
+
         $table->save();
+        
         return $table;
 
     }
@@ -90,15 +93,15 @@ class ProductController extends Controller
         $table->stocks = $request->stocks;
         $table->product_category = $request->product_category;
    
-        if($request->img){
-            File::delete($table->img);
+        if($request->file('image')){
+
+            $imageName = time().'.'. $request->file('image')->extension();  
+            $request->file('image')->move(public_path('images'), $imageName);
+            $table->img =   $imageName;
+            // unlink(public_path('images/'.$request->img));
         }
+       
 
-        $imageName = time().'.'. $request->file('image')->extension();  
-        $request->file('image')->move(public_path('images'), $imageName);
-        $table->img =   $imageName;
-
-        $table->img =   $imageName;
         $table->save();
         return $table;
     }

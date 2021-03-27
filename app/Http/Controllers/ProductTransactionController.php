@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product_transaction;
+use App\Models\Transaction;
+use App\Models\Client;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProductTransactionController extends Controller
@@ -12,9 +14,13 @@ class ProductTransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getChartsData(Request $request)
     {
-        //
+        // $sales = Transaction::selectRaw("sum(amount) as sales,  DATE_FORMAT(created_at, '%Y %m %e') date")
+        $sales = Transaction::selectRaw("sum(amount) as sales, Date(created_at) date")
+        ->groupBy('date')
+        ->get();
+        return $sales;
     }
 
     /**

@@ -13,4 +13,8 @@ class Client extends Model
         'phone',
         'count_purchase',
     ];
+
+    public function transaction(){
+        return $this->hasMany(Transaction::class);
+    }
 }

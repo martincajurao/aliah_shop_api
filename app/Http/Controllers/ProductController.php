@@ -18,14 +18,11 @@ class ProductController extends Controller
         return $products;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function searchProduct(Request $request){
+        $products =Product::where('name', 'LIKE', "%{$request->search}%") 
+        ->orWhere('id', 'LIKE', "%{$request->search}%") 
+        ->get();
+        return $products;
     }
 
     /**
@@ -66,16 +63,7 @@ class ProductController extends Controller
         return Product::with('category')->findOrFail($id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+ 
 
     /**
      * Update the specified resource in storage.

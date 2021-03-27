@@ -20,6 +20,6 @@ class Product extends Model
         return $this->belongsTo(Category::Class,'product_category');
     }
     public function transaction(){
-        return $this->belongsTo(Transaction::class, 'Product_transaction', 'product_id', 'transaction_id');
+        return $this->belongsToMany(Transaction::class, 'product_transactions', 'product_id', 'transaction_id');
     }
 }

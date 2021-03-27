@@ -13,6 +13,10 @@ class Transaction extends Model
         return $this->belongsTo(Client::class, 'client_id');
     }
     public function product() {
-        return $this->belongsTo(Product::class, 'Product_transaction', 'transaction_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'product_transactions', 'transaction_id', 'product_id');
+    }
+
+    public function orderline() {
+        return $this->hasMany(Product_transaction::class);
     }
 }

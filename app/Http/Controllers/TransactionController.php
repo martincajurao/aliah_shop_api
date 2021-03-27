@@ -23,8 +23,8 @@ class TransactionController extends Controller
     }
 
     public function searchTransacntion(Request $request){
-        $transactions = Transaction::with('client')->where('client_name', 'LIKE', "%{$request->search}%") 
-        ->orWhere('invoice_no', 'LIKE', "%{$request->search}%") 
+        $transactions = Transaction::with('client')->where('client_name', 'LIKE', "%{$request->search}%")
+        ->orWhere('invoice_no', 'LIKE', "%{$request->search}%")
         ->orderBy('id', 'DESC')
         ->get();
         return $transactions;
@@ -59,8 +59,8 @@ class TransactionController extends Controller
         $table->amount = $request->amount;
         $table->save();
         $trans_last_id = $table->id;
-        
-         
+
+
         $collection = collect($request->purchase);
         $data =[];
         $data = $collection->map(function ($item) use ($trans_last_id) {
@@ -82,38 +82,32 @@ class TransactionController extends Controller
     }
 
 
-    public function generateClientsInvoicePdf(Request $request)
+    public function gerenatePdf(Request $request)
     {
-        $invoice_controller = new InvoiceController;
-        $invoices = $invoice_controller->getClientInvoice($request->id);
+        $data = Transaction::with('orderline')->find($request->id);
 
-        $pdf = PDF::loadView( 
-            'pdfs.invoice.clients_invoice',
-            [
-                'invoices'=>$invoices,
-                'company' => getCompanyDetails()
-            ]
+        $pdf = PDF::loadView(
+            'reports.reciept',
+            ['data'=>$data]
         );
-      
-        return $pdf->stream('clients_invoice.pdf');
+
+        return $pdf->download('filename.pdf');
+        // return $data;
+
     }
 
-    public function generateClientsInvoicePrintPreview(Request $request)
+    public function gerenatePrint(Request $request)
     {
-        $invoice_controller = new InvoiceController;
-        $invoice = $invoice_controller->getClientInvoice($request->id);
-    
-        $pdf = PDF::loadView( 
-            'pdfs.invoice.clients_invoice',
-            [
-                'invoices' => $invoice,
-                'company'  => getCompanyDetails()
-            ]
+        $data = Transaction::with('product')->find($request->id);
+
+        $pdf = PDF::loadView(
+            'reports.reciept',
+            ['data'=>$data]
         );
-        $pdf->save(public_path($this->pdfPreview_dir));
-        return $invoice;
+
+        $pdf->save(public_path('files/preview.pdf'));
+        return $data;
     }
-    
 
 
 }

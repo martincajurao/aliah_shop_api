@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Models\Client;
 use App\Models\Product;
 use App\Models\Product_transaction;
+use App\Http\Controllers\Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 
@@ -27,6 +28,19 @@ class TransactionController extends Controller
         ->orWhere('invoice_no', 'LIKE', "%{$request->search}%")
         ->orderBy('id', 'DESC')
         ->get();
+        return $transactions;
+    }
+    public function getTodaysSale(){
+        $date = date('Y-m-d');
+        $transactions = Transaction::selectRaw('sum(amount) as total')
+        ->where('created_at', 'LIKE', "%{$date}%")
+        ->get();
+        return $transactions;
+    }
+    public function getSearchSales(Request $request){
+        // $transactions = Transaction::with('client')->where('created_at', '>=', $request->from)
+        // ->where('created_at', '<=', $request->to)->get();
+        $transactions = Transaction::with('client')->whereBetween('created_at', [$request->from, $request->to])->get();
         return $transactions;
     }
 

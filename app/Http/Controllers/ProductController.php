@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 use \App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class ProductController extends Controller
 {
@@ -19,8 +20,13 @@ class ProductController extends Controller
     }
 
     public function searchProduct(Request $request){
-        $products =Product::where('name', 'LIKE', "%{$request->search}%") 
-        ->orWhere('id', 'LIKE', "%{$request->search}%") 
+        $products =Product::where('name', 'LIKE', "%{$request->search}%")
+        ->orWhere('id', 'LIKE', "%{$request->search}%")
+        ->get();
+        return $products;
+    }
+    public function searchBarcode(Request $request){
+        $products = Product::where('desc', $request->barcode)
         ->get();
         return $products;
     }
@@ -41,13 +47,13 @@ class ProductController extends Controller
         $table->product_category = $request->product_category;
 
         if($request->file('image')){
-            $imageName = time().'.'. $request->file('image')->extension();  
+            $imageName = time().'.'. $request->file('image')->extension();
             $request->file('image')->move(public_path('images'), $imageName);
             $table->img =   $imageName;
         }
 
         $table->save();
-        
+
         return $table;
 
     }
@@ -63,7 +69,7 @@ class ProductController extends Controller
         return Product::with('category')->findOrFail($id);
     }
 
- 
+
 
     /**
      * Update the specified resource in storage.
@@ -80,15 +86,15 @@ class ProductController extends Controller
         $table->price = $request->price;
         $table->stocks = $request->stocks;
         $table->product_category = $request->product_category;
-   
+
         if($request->file('image')){
 
-            $imageName = time().'.'. $request->file('image')->extension();  
+            $imageName = time().'.'. $request->file('image')->extension();
             $request->file('image')->move(public_path('images'), $imageName);
             $table->img =   $imageName;
             // unlink(public_path('images/'.$request->img));
         }
-       
+
 
         $table->save();
         return $table;
@@ -104,5 +110,18 @@ class ProductController extends Controller
     {
         $table = Product::findOrFail($id);
         $table->delete();
+    }
+
+    public function generateBarcode(Request $request){
+
+        $data = Product::find($request->id);
+
+        $pdf = PDF::loadView(
+            'reports.barcode',
+            ['data'=>$data]
+        );
+
+        $pdf->save(public_path('files/preview.pdf'));
+        return $data;
     }
 }

@@ -40,9 +40,10 @@ class TransactionController extends Controller
     public function getSearchSales(Request $request){
         // $transactions = Transaction::with('client')->where('created_at', '>=', $request->from)
         // ->where('created_at', '<=', $request->to)->get();
-        $transactions = Transaction::with('client')->whereBetween('created_at', [$request->from, $request->to])->get();
+        $transactions = Transaction::with('client')->whereBetween('created_at', [$request->from." 00:00:00", $request->to." 23:59:59"])->get();
         return $transactions;
     }
+
 
 
     /**
@@ -121,6 +122,18 @@ class TransactionController extends Controller
 
         $pdf->save(public_path('files/preview.pdf'));
         return $data;
+    }
+
+    public function gerenateSalesPrint(Request $request){
+        // $data = Transaction::with('product')->find($request->id);
+
+        $pdf = PDF::loadView(
+            'reports.sales',
+            ['data'=>$request]
+        )->setPaper('a4', 'portrait');
+
+        $pdf->save(public_path('files/preview.pdf'));
+        return $request;
     }
 
 

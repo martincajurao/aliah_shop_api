@@ -16,6 +16,7 @@ Route::resource('/products', ProductController::class);
 Route::post('/barcode', [ProductController::class,'generateBarcode']);
 Route::get('/products-search', [ProductController::class,'searchProduct']);
 Route::get('/products-find', [ProductController::class,'searchBarcode']);
+Route::get('/bars', [TransactionController::class,'getbarsData']);
 Route::get('/charts', [ProductTransactionController::class,'getChartsData']);
 Route::get('/todays_sale', [TransactionController::class,'getTodaysSale']);
 Route::get('/search_sales', [TransactionController::class,'getSearchSales']);

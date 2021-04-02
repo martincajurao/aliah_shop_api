@@ -20,7 +20,15 @@ class TransactionController extends Controller
      */
     public function index()
     {
-       return Transaction::with('client')->orderBy('id', 'DESC')->get();
+        $result = Transaction::with('client')->orderBy('id', 'DESC')->get();
+        return $result;
+    }
+    public function getbarsData()
+    {
+        $sales = Transaction::selectRaw('sum(amount) as total_sales')->get();
+        $assets = Product::selectRaw('sum(stocks*price) as total_assets')->get();
+        $expenses = Product::selectRaw('sum(price) as total_expenses')->get();
+        return [$assets, $sales, $expenses];
     }
 
     public function searchTransacntion(Request $request){

@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Product;
 use App\Models\Product_transaction;
 use App\Http\Controllers\Carbon\Carbon;
+use App\Models\Expense;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 
@@ -27,7 +28,7 @@ class TransactionController extends Controller
     {
         $sales = Transaction::selectRaw('sum(amount) as total_sales')->get();
         $assets = Product::selectRaw('sum(stocks*price) as total_assets')->get();
-        $expenses = Product::selectRaw('sum(price) as total_expenses')->get();
+        $expenses = Expense::selectRaw('sum(amount) as total_expenses')->get();
         return [$assets, $sales, $expenses];
     }
 
@@ -43,7 +44,13 @@ class TransactionController extends Controller
         $transactions = Transaction::selectRaw('sum(amount) as total')
         ->where('created_at', 'LIKE', "%{$date}%")
         ->get();
-        return $transactions;
+
+        $expenses = Expense::selectRaw('sum(amount) as total_expenses')
+        ->where('created_at', 'LIKE', "%{$date}%")
+        ->get();
+
+
+        return [$transactions, $expenses];
     }
     public function getSearchSales(Request $request){
         // $transactions = Transaction::with('client')->where('created_at', '>=', $request->from)

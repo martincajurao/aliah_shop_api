@@ -18,20 +18,38 @@ class ProductSeeder extends Seeder
     public function run()
     {
         DB::table('products')->insert([
-            'name' => 'Tshirt',
-            'price' => 320,
-            'desc' => 'this is Tshirt',
+            'name' => 'SAO',
+            'price' => 300,
+            'desc' => '1000568795',
             'product_category' => 1,
-            'stocks' => 200,
-            'img' => '',
+            'stocks' => 20,
+            'img' => '1.jpg',
         ]);
         DB::table('products')->insert([
-            'name' => 'Shorts',
-            'price' => 150,
-            'desc' => 'this is Shorts',
+            'name' => 'OP',
+            'price' => 450,
+            'desc' => '1000568795',
             'product_category' => 1,
-            'stocks' => 150,
-            'img' => '',
+            'stocks' => 8,
+            'img' => '2.jpeg',
+
+        ]);
+        DB::table('products')->insert([
+            'name' => 'AOT',
+            'price' => 1550,
+            'desc' => '1000568795',
+            'product_category' => 1,
+            'stocks' => 15,
+            'img' => '3.jpg',
+
+        ]);
+        DB::table('products')->insert([
+            'name' => 'IDM',
+            'price' => 750,
+            'desc' => '1000568795',
+            'product_category' => 1,
+            'stocks' => 50,
+            'img' => '4.jpg',
 
         ]);
     }

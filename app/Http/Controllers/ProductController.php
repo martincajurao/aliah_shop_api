@@ -18,6 +18,11 @@ class ProductController extends Controller
         $products = Product::with('category')->get();
         return $products;
     }
+    public function getAllAssets()
+    {
+        $assets = Product::with('category')->get();
+        return $assets;
+    }
 
     public function searchProduct(Request $request){
         $products =Product::where('name', 'LIKE', "%{$request->search}%")

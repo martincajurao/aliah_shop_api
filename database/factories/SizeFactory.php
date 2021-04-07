@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ProductFactory extends Factory
+class SizeFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Product::class;
+    protected $model = Size::class;
 
     /**
      * Define the model's default state.
@@ -22,7 +22,7 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-
+            //
         ];
     }
 }

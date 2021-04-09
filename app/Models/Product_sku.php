@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Product_sku extends Model
 {
     use HasFactory;
+
+    public function product() {
+        return $this->belongsTo(Product::Class,'product_id');
+    }
 }

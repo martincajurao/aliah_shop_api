@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use \App\Models\Product;
+use App\Models\Product_sku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -50,16 +51,31 @@ class ProductController extends Controller
         $table->price = $request->price;
         $table->stocks = $request->stocks;
         $table->product_category = $request->product_category;
-
+        $table->img = "default.jpg";
         if($request->file('image')){
             $imageName = time().'.'. $request->file('image')->extension();
             $request->file('image')->move(public_path('images'), $imageName);
             $table->img =   $imageName;
         }
-
         $table->save();
+        $product_id = $table->id;
 
-        return $table;
+        $collection = collect(json_decode($request->variants));
+
+        $data = $collection->map(function ($item) use ($product_id) {
+            $data['product_id'] = $product_id;
+            $data['sku'] = $item->sku;
+            $data['price'] = $item->price;
+            $data['size'] = $item->size;
+            $data['color'] = $item->color;
+            $data['stocks'] = $item->stocks;
+            $data['created_at'] = date('Y-m-d H:i:s');
+            return $data;
+        });
+
+        Product_sku::insert($data->toArray());
+
+        return $data;
 
     }
 
@@ -71,7 +87,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return Product::with('category')->findOrFail($id);
+        return Product::with('category','sku')->findOrFail($id);
     }
 
 
@@ -99,9 +115,24 @@ class ProductController extends Controller
             $table->img =   $imageName;
             // unlink(public_path('images/'.$request->img));
         }
-
-
         $table->save();
+
+        Product_sku::where('product_id', $id)->delete();
+
+        $collection = collect(json_decode($request->variants));
+        $data = $collection->map(function ($item) use ($id) {
+            $data['product_id'] = $id;
+            $data['sku'] = $item->sku;
+            $data['price'] = $item->price;
+            $data['size'] = $item->size;
+            $data['color'] = $item->color;
+            $data['stocks'] = $item->stocks;
+            $data['created_at'] = date('Y-m-d H:i:s');
+            return $data;
+        });
+
+        Product_sku::insert($data->toArray());
+
         return $table;
     }
 

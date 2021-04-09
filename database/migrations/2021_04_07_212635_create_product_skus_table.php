@@ -18,9 +18,9 @@ class CreateProductSkusTable extends Migration
             $table->integer('product_id');
             $table->string('sku')->nullable();
             $table->integer('price')->nullable();
-            $table->integer('size_id')->nullable();
-            $table->integer('color_id')->nullable();
-            $table->integer('qty')->default(0);
+            $table->string('size')->nullable();
+            $table->string('color')->nullable();
+            $table->integer('stocks')->default(0);
             $table->timestamps();
         });
     }

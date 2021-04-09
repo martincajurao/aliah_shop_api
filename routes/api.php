@@ -6,7 +6,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTransactionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\SizeController;
 use App\Http\Controllers\TransactionController;
 
 
@@ -32,5 +34,7 @@ Route::resource('/categories', CategoryController::class);
 Route::resource('/clients', ClientController::class);
 Route::resource('/transactions', TransactionController::class);
 Route::resource('/expenses', ExpenseController::class);
+Route::resource('/sizes', SizeController::class);
+Route::resource('/colors', ColorController::class);
 
 // Route::get('/products', [ProductController::class, 'index']);

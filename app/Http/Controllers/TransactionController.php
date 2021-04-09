@@ -92,7 +92,7 @@ class TransactionController extends Controller
 
 
         $collection = collect($request->purchase);
-        $data =[];
+
         $data = $collection->map(function ($item) use ($trans_last_id) {
             $data['transaction_id'] = $trans_last_id;
             $data['product_id'] = $item['id'];

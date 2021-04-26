@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Product_transaction;
 use App\Http\Controllers\Carbon\Carbon;
 use App\Models\Expense;
+use App\Models\Product_sku;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 
@@ -27,7 +28,7 @@ class TransactionController extends Controller
     public function getbarsData()
     {
         $sales = Transaction::selectRaw('sum(amount) as total_sales')->get();
-        $assets = Product::selectRaw('sum(stocks*price) as total_assets')->get();
+        $assets = Product_sku::selectRaw('sum(stocks*price) as total_assets')->get();
         $expenses = Expense::selectRaw('sum(amount) as total_expenses')->get();
         return [$assets, $sales, $expenses];
     }
@@ -100,6 +101,7 @@ class TransactionController extends Controller
             $data['price'] = $item['price'];
             $data['qty'] = $item['qty'];
             $data['subtotal'] = $item['subtotal'];
+            $data['created_at'] = date('Y-m-d H:i:s');
             return $data;
         });
         if($trans_last_id){

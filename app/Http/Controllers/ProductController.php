@@ -16,23 +16,39 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category')->get();
+        $products = Product::with('category', 'sku')->get();
+        return $products;
+    }
+    public function getFeaturedProducts()
+    {
+        $products = Product_sku::with('product')
+        ->limit(8)
+        ->get();
         return $products;
     }
     public function getAllAssets()
     {
-        $assets = Product::with('category')->get();
+        $assets = Product_sku::with('product')->get();
         return $assets;
     }
 
     public function searchProduct(Request $request){
-        $products =Product::where('name', 'LIKE', "%{$request->search}%")
-        ->orWhere('id', 'LIKE', "%{$request->search}%")
+        $searchString = $request->search;
+        $products =Product_sku::with('product')
+        ->whereHas('product', function ($query) use ($searchString){
+            $query->where('name', 'like', '%'.$searchString.'%');
+        })
+        ->orWhere('sku', 'LIKE', "%{$searchString}%")
+        ->limit(8)
         ->get();
         return $products;
     }
     public function searchBarcode(Request $request){
-        $products = Product::where('desc', $request->barcode)
+        $searchString = $request->barcode;
+        $products = Product_sku::with('product')
+        ->whereHas('product', function ($query) use ($searchString){
+            $query->where('sku', 'like', '%'.$searchString.'%');
+        })
         ->get();
         return $products;
     }
@@ -159,5 +175,25 @@ class ProductController extends Controller
 
         $pdf->save(public_path('files/preview.pdf'));
         return $data;
+    }
+    public function gerenateAssetsPrint(Request $request){
+
+        $pdf = PDF::loadView(
+            'reports.assets',
+            ['data'=>$request]
+        )->setPaper('a4', 'portrait');
+
+        $pdf->save(public_path('files/preview.pdf'));
+        return $request;
+    }
+    public function gerenateAssetsSalesPrint(Request $request){
+
+        $pdf = PDF::loadView(
+            'reports.assetsSales',
+            ['data'=>$request]
+        )->setPaper('a4', 'portrait');
+
+        $pdf->save(public_path('files/preview.pdf'));
+        return $request;
     }
 }

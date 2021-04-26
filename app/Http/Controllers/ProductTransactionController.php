@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Models\Client;
+use App\Models\Product_transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,16 @@ class ProductTransactionController extends Controller
         ->groupBy('date')
         ->get();
         return $sales;
+    }
+    public function getAllAssets(Request $request)
+    {
+        $sales = Product_transaction::all();
+
+        return $sales;
+    }
+    public function getSearchAssetsSales(Request $request){
+        $expense = Product_transaction::whereBetween('created_at', [$request->from." 00:00:00", $request->to." 23:59:59"])->get();
+        return $expense;
     }
 
     /**

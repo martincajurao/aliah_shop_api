@@ -109,6 +109,7 @@ class TransactionController extends Controller
             Transaction::where('id',$trans_last_id)->update(array('invoice_no' => 'INV-'.$trans_last_id));
             foreach ($collection as $key => $product) {
                 Product::where('id', $product['id'])->update(array('stocks' => $product['stocks'] - $product['qty']));
+                Product_sku::where('id', $product['id'])->update(array('stocks' => $product['stocks'] - $product['qty']));
             }
         }
     }

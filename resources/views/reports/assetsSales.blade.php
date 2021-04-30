@@ -137,7 +137,7 @@ function formatDate($date){
             <th class="text-left">#</th>
             <th class="text-left">Product Name w/ Variant </th>
             <th class="text-right">Price</th>
-            <th class="text-right">Quantity</th>
+            <th class="text-right">Sold</th>
             <th class="text-right">Date Created</th>
             <th class="text-right">Subtotal</th>
         </tr>

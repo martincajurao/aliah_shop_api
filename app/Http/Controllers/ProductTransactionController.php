@@ -23,14 +23,17 @@ class ProductTransactionController extends Controller
         ->get();
         return $sales;
     }
-    public function getAllAssets(Request $request)
+    public function getAllAssetsSales(Request $request)
     {
-        $sales = Product_transaction::all();
+        $sales = Product_transaction::selectRaw('*, sum(qty) as qty')
+        ->groupBy('name')->get();
 
         return $sales;
     }
     public function getSearchAssetsSales(Request $request){
-        $expense = Product_transaction::whereBetween('created_at', [$request->from." 00:00:00", $request->to." 23:59:59"])->get();
+        $expense = Product_transaction::selectRaw('*, sum(qty) as qty')
+        ->groupBy('name')
+        ->whereBetween('created_at', [$request->from." 00:00:00", $request->to." 23:59:59"])->get();
         return $expense;
     }
 

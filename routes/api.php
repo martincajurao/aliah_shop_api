@@ -21,7 +21,7 @@ Route::get('/products-search', [ProductController::class,'searchProduct']);
 Route::get('/products-find', [ProductController::class,'searchBarcode']);
 Route::get('/products-featured', [ProductController::class,'getFeaturedProducts']);
 Route::get('/assets', [ProductController::class,'getAllAssets']);
-Route::get('/assets-sales', [ProductTransactionController::class,'getAllAssets']);
+Route::get('/assets-sales', [ProductTransactionController::class,'getAllAssetsSales']);
 Route::get('/bars', [TransactionController::class,'getbarsData']);
 Route::get('/charts', [ProductTransactionController::class,'getChartsData']);
 Route::get('/todays_sale', [TransactionController::class,'getTodaysSale']);

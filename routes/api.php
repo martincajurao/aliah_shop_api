@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
@@ -10,11 +11,17 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
 
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Route::group(['middleware' => ['auth:sanctum'] ], function () {
+
 });
+Route::post('/register', [AuthController::class,'register']);
+Route::post('/login', [AuthController::class,'login']);
 Route::resource('/products', ProductController::class);
 Route::post('/barcode', [ProductController::class,'generateBarcode']);
 Route::get('/products-search', [ProductController::class,'searchProduct']);
@@ -41,5 +48,6 @@ Route::resource('/transactions', TransactionController::class);
 Route::resource('/expenses', ExpenseController::class);
 Route::resource('/sizes', SizeController::class);
 Route::resource('/colors', ColorController::class);
+Route::resource('/users', UserController::class);
 
 // Route::get('/products', [ProductController::class, 'index']);

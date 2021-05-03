@@ -12,7 +12,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
-
+use App\Models\Store;
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -49,5 +49,8 @@ Route::resource('/expenses', ExpenseController::class);
 Route::resource('/sizes', SizeController::class);
 Route::resource('/colors', ColorController::class);
 Route::resource('/users', UserController::class);
+Route::get('/store', function () {
+    return Store::all();
+});
 
 // Route::get('/products', [ProductController::class, 'index']);

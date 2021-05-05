@@ -35,7 +35,10 @@ class SizeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $table = new Size;
+        $table->name = strtoupper($request->name);
+        $table->save();
+        return $table;
     }
 
     /**
@@ -78,8 +81,9 @@ class SizeController extends Controller
      * @param  \App\Models\Size  $size
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Size $size)
+    public function destroy($id)
     {
-        //
+        $table = Size::findOrFail($id);
+        $table->delete();
     }
 }

@@ -24,7 +24,7 @@ class ColorController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -35,7 +35,10 @@ class ColorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $table = new Color;
+        $table->name = strtoupper($request->name);
+        $table->save();
+        return $table;
     }
 
     /**
@@ -44,9 +47,9 @@ class ColorController extends Controller
      * @param  \App\Models\Color  $color
      * @return \Illuminate\Http\Response
      */
-    public function show(Color $color)
+    public function show($id)
     {
-        //
+        return Color::findOrFail($id);
     }
 
     /**
@@ -67,9 +70,13 @@ class ColorController extends Controller
      * @param  \App\Models\Color  $color
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Color $color)
+    public function update(Request $request, $id)
     {
-        //
+        $table = Color::findOrFail($id);
+        $table->name = $request->name;
+        $table->save();
+
+        return $table;
     }
 
     /**
@@ -78,8 +85,9 @@ class ColorController extends Controller
      * @param  \App\Models\Color  $color
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Color $color)
+    public function destroy($id)
     {
-        //
+        $table = Color::findOrFail($id);
+        $table->delete();
     }
 }

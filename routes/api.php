@@ -26,6 +26,7 @@ Route::post('/login', [AuthController::class,'login']);
 Route::resource('/products', ProductController::class);
 Route::post('/barcode', [ProductController::class,'generateBarcode']);
 Route::get('/products-search', [ProductController::class,'searchProduct']);
+Route::get('/products-display-category', [ProductController::class,'displayCategory']);
 Route::get('/products-find', [ProductController::class,'searchBarcode']);
 Route::get('/products-featured', [ProductController::class,'getFeaturedProducts']);
 Route::get('/assets', [ProductController::class,'getAllAssets']);

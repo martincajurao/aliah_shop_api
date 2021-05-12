@@ -19,10 +19,12 @@ class ProductController extends Controller
         $products = Product::with('category', 'sku')->get();
         return $products;
     }
+
     public function getFeaturedProducts()
     {
         $products = Product_sku::with('product')
-        ->limit(8)
+        ->orderBy('stocks', 'DESC')
+        ->limit(50)
         ->get();
         return $products;
     }
@@ -34,12 +36,27 @@ class ProductController extends Controller
 
     public function searchProduct(Request $request){
         $searchString = $request->search;
+        $category = $request->category;
         $products =Product_sku::with('product')
         ->whereHas('product', function ($query) use ($searchString){
             $query->where('name', 'like', '%'.$searchString.'%');
         })
+        ->whereHas('product.category', function ($query) use ($category){
+            $query->where('id', $category);
+        })
         ->orWhere('sku', 'LIKE', "%{$searchString}%")
-        ->limit(8)
+        ->limit(50)
+        ->orderBy('stocks', 'DESC')
+        ->get();
+        return $products;
+    }
+    public function displayCategory(Request $request){
+        $category = $request->category;
+        $products =Product_sku::with('product')
+        ->whereHas('product.category', function ($query) use ($category){
+            $query->where('id', $category);
+        })
+        ->limit(50)
         ->get();
         return $products;
     }
@@ -47,7 +64,7 @@ class ProductController extends Controller
         $searchString = $request->barcode;
         $products = Product_sku::with('product')
         ->whereHas('product', function ($query) use ($searchString){
-            $query->where('sku', 'like', '%'.$searchString.'%');
+            $query->where('sku', $searchString);
         })
         ->get();
         return $products;
